@@ -19,3 +19,7 @@ for down project:
 docker compose down --volumes
 ```
 
+### To remove FTP error when u wanna install or remove plugins paste it in last of *wp-config.php* file:
+```
+define('FS_METHOD', 'direct');
+```
