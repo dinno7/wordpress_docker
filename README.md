@@ -12,7 +12,10 @@ then run this command:
 docker compose up -d
 ```
 
+> `Then you can open http://localhost:8000 for wordpress and http://localhost:8080 for phpmyadmin`
+
 for down project:
 ```
 docker compose down --volumes
 ```
+
