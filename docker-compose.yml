@@ -1,0 +1,57 @@
+version: '3'
+
+services:
+  # >> Database service
+  mysql_db:
+    container_name: MYSQL
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: <root_password>
+      MYSQL_DATABASE: <database_name>
+      MYSQL_USER: <database_username>
+      MYSQL_PASSWORD: <database_password>
+    volumes:
+      # ["./db:/var/lib/mysql"]
+      - './mysql:/var/lib/mysql'
+
+  # >> Php my admin
+  phpmyadmin:
+    container_name: PHP_MY_ADMIN
+    depends_on:
+      - mysql_db
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - '8080:80'
+    environment:
+      PMA_HOST: mysql_db
+      MYSQL_ROOT_PASSWORD: <root_password>
+
+  # >> Wordpress (image based on Apache)
+  wordpress:
+    container_name: WORDPRESS
+    depends_on:
+      - mysql_db
+    image: wordpress:latest
+    restart: always
+    ports:
+      - '8000:80'
+    environment:
+      WORDPRESS_DB_HOST: mysql_db:3306
+      WORDPRESS_DB_USER: <database_username>
+      WORDPRESS_DB_PASSWORD: <database_password>
+      WORDPRESS_DB_NAME: <database_name>
+    volumes: [
+        './wordpress:/var/www/html',
+        # "./uploads.ini:/usr/local/etc/php/conf.d/uploads.ini",
+      ]
+# volumes:
+#   mysql: {}
+
+# >> Commands:
+# >> docker compose up -d
+# >> docker compose down --volumes
+
+# >> Run wordpress in http://localhost:8000
+# >> Run phpmyadmin in http://localhost:8080
